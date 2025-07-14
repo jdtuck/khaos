@@ -24,12 +24,12 @@ sobol.sparse_khaos <- function(object){
 
   # Sobol
   for (i in 1:p){
-    S[i] <- sum(object$coef[idx[[i]]]^2)/sum(object$coeff^2)
+    S[i] <- sum(object$beta_hat[idx[[i]]]^2)/sum(object$beta_hat^2)
   }
 
   # Total Sobol
   for (i in 1:p){
-    ST[i] <- sum(object$coef[object$vars[,i] != 0]^2)/sum(object$coeff^2)
+    ST[i] <- sum(object$beta_hat[object$vars[,i] != 0]^2)/sum(object$beta_hat^2)
   }
 
   return(list(S=S,ST=ST))
