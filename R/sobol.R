@@ -50,7 +50,7 @@ soboladaptive_khaos <- function(object){
   idx1 <- !is.na(vars)
   idx <- list()
   for (i in 1:p){
-    idx[[i]] <- which(idx1[,i])
+    idx[[i]] <- which(vars==i, arr.ind=TRUE)[,1]
   }
 
   dims <- 1:p
@@ -66,7 +66,7 @@ soboladaptive_khaos <- function(object){
 
   # Sobol
   for (i in 1:p){
-    S[i] <- sum(object$coef[idx[[i]]]^2)/sum(object$coeff^2)
+    S[i] <- sum(coef[idx[[i]]]^2)/sum(coef[2:nbasis]^2)
   }
 
   # Total Sobol
