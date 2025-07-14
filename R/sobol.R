@@ -23,7 +23,7 @@ for (i in 1:p){
 
 # Sobol
 for (i in 1:p){
-  S[i] <- sum(object$coef[idx[[i]]]^2)
+  S[i] <- sum(object$coef[idx[[i]]]^2)/sum(object$coeff^2)
 }
 
 # Total Sobol
