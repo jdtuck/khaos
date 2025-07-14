@@ -300,7 +300,7 @@ predict.sparse_khaos <- function(object, newdata=NULL, samples=1000, ...){
       shape <-  (ntrain+v0-p)/2
       sigma2 <- 1/stats::rgamma(1, shape, object$s2*shape)
       a_Sigma <- sigma2 * (object$G * object$BtBi)
-      a_hat <- object$coeff
+      a_hat <- object$beta_hat
       coeff <- stats::rnorm(a_hat, a_hat, diag(a_Sigma))
       #noise <- sqrt(1/stats::rgamma(1, (n+2)/2, scale=2/(n*object$s2)))
       y_hat <- phi%*%coeff + stats::rnorm(n, 0, sqrt(sigma2))
@@ -329,7 +329,7 @@ predict.sparse_khaos <- function(object, newdata=NULL, samples=1000, ...){
 #' plot(fit)
 #' @export
 plot.sparse_khaos <- function(x, ...){
-  pred <- predict(x, x$X, samples=1000)
+  pred <- stats::predict(x, x$X, samples=1000)
   yhat <- colMeans(pred)
   plot(x$y, yhat, ...)
   graphics::abline(0, 1, lwd=2, col='orange')
@@ -356,13 +356,13 @@ plot.sparse_khaos <- function(x, ...){
 #' print(fit)
 #' @export
 print.sparse_khaos <- function(x, ...){
-  vars_used <- colSums(fit$vars)
+  vars_used <- colSums(x$vars)
   names(vars_used) <- paste("V", seq_along(vars_used), sep="")
 
-  bf_degrees <- table(rowSums(fit$vars))
+  bf_degrees <- table(rowSums(x$vars))
   names(bf_degrees) <- paste("deg", seq_along(bf_degrees), sep="")
 
-  bf_orders <- table(rowSums(fit$vars))
+  bf_orders <- table(rowSums(x$vars))
   names(bf_orders) <- paste("ord", seq_along(bf_orders), sep="")
 
   cat("Fitted model contains", x$nbasis, "basis functions\n\n")
