@@ -1,5 +1,18 @@
-## sparse_khaos
-sobol.sparse_khaos <- function(object){
+#' @title Sparse Kahos Sensitivity Analysis
+#'
+#' @description Decomposes the variance of the Sparse Khaos model into variance due to main effects and total effects
+#' @param object a fitted model output from the \code{sparse_khaos} function.
+#' @param ... additional arguments passed
+#' @details Performs analytical Sobol' decomposition for each MCMC iteration in mcmc.use (each corresponds to a MARS model), yeilding a posterior distribution of sensitivity indices.  Can obtain Sobol' indices as a function of one functional variable.
+#' @return a list with two elements:
+#'  \item{S}{a vector of sensitivity indices with number of entries the number of parameters.}
+#'  \item{ST}{a vector of sensitivity indices with number of entries the number of parameters.}
+#'
+#' @keywords Sobol decomposition
+#' @seealso \link{sparse_khaos} for model fitting and \link{predict.sparse_khaos} for prediction.
+#' @export
+#'
+sobol.sparse_khaos <- function(object, ...){
   p <- ncol(object$vars)
   ST <- rep(NA, p)
   S <- rep(NA, p)
@@ -50,7 +63,7 @@ soboladaptive_khaos <- function(object){
   idx1 <- !is.na(vars)
   idx <- list()
   for (i in 1:p){
-    idx[[i]] <- which(vars==i, arr.ind=TRUE)[,1]
+    idx[[i]] <- which(vars[,i]==i)
   }
 
   dims <- 1:p
@@ -66,7 +79,7 @@ soboladaptive_khaos <- function(object){
 
   # Sobol
   for (i in 1:p){
-    S[i] <- sum(coef[idx[[i]]]^2)/sum(coef[2:nbasis]^2)
+    S[i] <- sum(coef[idx[[i]]]^2)/sum(coef^2)
   }
 
   # Total Sobol
@@ -77,3 +90,17 @@ soboladaptive_khaos <- function(object){
   return(list(S=S,ST=ST))
 }
 
+#' @title Sensitivity Analysis
+#'
+#' @description Decomposes the variance of the Sparse Khaos model into variance due to main effects and total effects
+#' @param object a fitted model output
+#' @export
+sobol <- function(object, ...) {
+  UseMethod("sobol")
+}
+
+
+#' @export
+sobol.default <- function(object, ...) {
+  cat("This is a generic function\n")
+}
