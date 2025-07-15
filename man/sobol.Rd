@@ -8,6 +8,8 @@ sobol(object, ...)
 }
 \arguments{
 \item{object}{a fitted model output}
+
+\item{...}{Additional arguments to sobol}
 }
 \description{
 Decomposes the variance of the Sparse Khaos model into variance due to main effects and total effects

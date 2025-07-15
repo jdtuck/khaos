@@ -94,6 +94,7 @@ soboladaptive_khaos <- function(object){
 #'
 #' @description Decomposes the variance of the Sparse Khaos model into variance due to main effects and total effects
 #' @param object a fitted model output
+#' @param ... Additional arguments to sobol
 #' @export
 sobol <- function(object, ...) {
   UseMethod("sobol")
